@@ -7,6 +7,8 @@ import (
     "net/http"
     "path/filepath"
     "strings"
+
+    "github.com/garyburd/redigo/redis"
 )
 
 var NotSupportedExtension = fmt.Errorf("Not supported extenstion")
@@ -22,7 +24,7 @@ func loadPage(path string) (body []byte, err error) {
     return ioutil.ReadFile(f)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func genericHandler(w http.ResponseWriter, r *http.Request) {
     b, err := loadPage(r.URL.Path);
     if err == nil {
         w.Write(b);
@@ -33,8 +35,47 @@ func handler(w http.ResponseWriter, r *http.Request) {
 //  w.Header().Set("Content-Type", "application/json; charset=utf-8")
 }
 
+// login process
+func login(w http.ResponseWriter, r *http.Request) {
+    // readbody
+    // verify identity
+    // generate token
+    // send token
+    // store token
+}
+
+// config personal profile
+func config(w http.ResponseWriter, r *http.Request) {
+    // verify token
+    // store config
+}
+
+// admin list users & config
+func admin(w http.ResponseWriter, r *http.Request) {
+    // verify token
+    // list admin profile
+}
+
+func post(w http.ResponseWriter, r *http.Request) {
+    // verify token
+    // mapping identify
+    // store latlng
+}
+
+func get(w http.ResponseWriter, r *http.Request) {
+    // verify token
+    // mapping identify
+    // read friends latlng
+}
+
 func main() {
-    http.HandleFunc("/", handler)
+    // init db conn
+    http.HandleFunc("/login:", genericHandler)
+    http.HandleFunc("/config:", genericHandler)    
+    http.HandleFunc("/admin:", genericHandler)
+    http.HandleFunc("/post:", genericHandler)
+    http.HandleFunc("/get:", genericHandler)
+    http.HandleFunc("/", genericHandler)
     http.ListenAndServe(":8080", nil)
 }
 
